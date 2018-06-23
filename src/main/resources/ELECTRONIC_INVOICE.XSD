@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema 
+            xmlns:tns="http://pis.technologica.com/electronic_invoice.xsd"
+            targetNamespace="http://pis.technologica.com/electronic_invoice.xsd" 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+            
+    <!-- ==================================================================================================== -->
+    
+    <xsd:simpleType name="Str_exact_2_digits">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от точно 2 цифри. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="\d{2}"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Str_exact_6_digits">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от точно 6 цифри. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="\d{6}"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  
+    <xsd:simpleType name="Str_exact_10_digits">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от точно 10 цифри. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="\d{10}"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Str_exact_9_13_digits">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от точно 9 или 13 цифри. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="\d{9,9}|\d{13,13}"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!-- ==================================================================================================== -->
+  
+    <xsd:simpleType name="Str_upto_120">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от 1 до 120 символа. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:minLength value="1"/>
+        <xsd:maxLength value="120"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Str_upto_2000">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от 1 до 2000 символа. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:minLength value="1"/>
+        <xsd:maxLength value="2000"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Str_upto_20">
+      <xsd:annotation>
+        <xsd:documentation>Последователност от 1 до 20 символа. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:minLength value="1"/>
+        <xsd:maxLength value="20"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!-- ==================================================================================================== -->
+    
+    <xsd:simpleType name="One_Zero" final="restriction" >
+      <xsd:annotation>
+        <xsd:documentation>1 - Истина/Да; 0 - Лъжа/Не</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="0" />
+        <xsd:enumeration value="1" />
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Yes_No" final="restriction" >
+      <xsd:annotation>
+        <xsd:documentation>Y - да; N - не</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Y" />
+        <xsd:enumeration value="N" />
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Мoney">
+      <xsd:annotation>
+        <xsd:documentation>Число с два знака след десетичната запетая</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:decimal">
+         <xsd:fractionDigits value="2"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Мoney3">
+      <xsd:annotation>
+        <xsd:documentation>Число с три знака след десетичната запетая</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:decimal">
+         <xsd:fractionDigits value="3"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Payment_type" final="restriction">
+      <xsd:annotation>
+        <xsd:documentation>Вид плащане</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="B" />
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="Original" final="restriction">
+      <xsd:annotation>
+        <xsd:documentation>Оригинал на фактура</xsd:documentation>
+      </xsd:annotation>
+      <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="Y" />
+      </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!-- ==================================================================================================== -->
+  
+  
+    <xsd:element name="Main_Fin_Doc"> 
+      <xsd:complexType>
+        <xsd:annotation>
+            <xsd:documentation>Основен финансов документ. Задължителен за документи кредитно известие и дебитно известие.</xsd:documentation>
+        </xsd:annotation> 
+        <xsd:sequence>
+            <xsd:element name="document_no" type="tns:Str_exact_10_digits">
+                <xsd:annotation>
+                    <xsd:documentation>№ на основен финансов документ. Символен низ от цифри точно 10 на брой.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="document_date" type="xsd:date">
+                <xsd:annotation>
+                    <xsd:documentation>Дата на основен финансов документ.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>  
+    </xsd:complexType>
+    </xsd:element>
+  
+    <xsd:element name="Invoice_Recipient">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>Получател на финансовия документ.</xsd:documentation>
+            </xsd:annotation> 
+            <xsd:sequence>
+                
+                <xsd:element name="recipient_code" type="tns:Str_exact_2_digits">
+                  <xsd:annotation>
+                    <xsd:documentation>Код получател / Код РЗОК</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+        
+                <xsd:element name="recipient_name" type="tns:Str_upto_120">
+                  <xsd:annotation>
+                    <xsd:documentation>Наименование получател / Име РЗОК</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                
+                <xsd:element name="recipient_address" type="tns:Str_upto_2000">
+                  <xsd:annotation>
+                    <xsd:documentation>Адрес РЗОК</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                
+                <xsd:element name="recipient_bulstat" type="tns:Str_exact_9_13_digits">
+                  <xsd:annotation>
+                    <xsd:documentation>Булстат/ЕИК на РЗОК.</xsd:documentation>
+                  </xsd:annotation>
+                </xsd:element>
+                
+            </xsd:sequence>      
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Person_Info">
+        <xsd:complexType>
+          <xsd:annotation>
+              <xsd:documentation>Идентификатор и имена на физическо лице.</xsd:documentation>
+          </xsd:annotation>
+          <xsd:sequence>
+          
+            <xsd:element name="Identifier">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:choice>
+                  
+                    <xsd:element name="grao_no" type="tns:Str_exact_10_digits">
+                      <xsd:annotation>
+                        <xsd:documentation>ЕГН</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                  
+                    <xsd:element name="foreign_no" type="tns:Str_exact_10_digits">
+                      <xsd:annotation>
+                        <xsd:documentation>ЛНЧ</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                    
+                    <xsd:element name="foreign_social_no" type="tns:Str_upto_20">
+                      <xsd:annotation>
+                        <xsd:documentation>Номер от НАП</xsd:documentation>
+                      </xsd:annotation>
+                    </xsd:element>
+                  
+                  </xsd:choice>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          
+            <xsd:element name="first_name" type="tns:Str_upto_120">
+              <xsd:annotation>
+                <xsd:documentation>Име на лицето.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="second_name" type="tns:Str_upto_120">
+              <xsd:annotation>
+                <xsd:documentation>Презиме на лицето.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="last_name" type="tns:Str_upto_120">
+              <xsd:annotation>
+                <xsd:documentation>Фамилия на лицето.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          
+          </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Invoice_Issuer">
+      <xsd:complexType>
+        <xsd:sequence>
+            
+            <xsd:element name="issuer_type" type="tns:One_Zero"> 
+              <xsd:annotation>
+                <xsd:documentation>Тип издател: 0 - Юридическо лице; 1 - физическо лице</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="legal_form" type="tns:Str_upto_20" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Код на Юридическа форма - ЕТ, ЕООД, ООД, АД, ЕАД  и т.н. по номенклатура NOM_LEGAL_ENTITIES_TYPES. Задължителен за Тип издател “0 - Юридическо лице“.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="self_insured" type="tns:Yes_No" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Самоосигуряващ се (флаг). Попълва се за Тип издател “1 - физическо лице“.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="self_insured_declaration" type="tns:Yes_No" minOccurs="0" maxOccurs="1"> 
+              <xsd:annotation>
+                <xsd:documentation>Декларация за самоосигуряващ се (флаг). Задължителен при избран флаг “Самоосигуряващ се“</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="company_name" type="tns:Str_upto_2000" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Име на фирмата по договор. Задължителен за Тип издател “0 - юридическо лице“.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Person_Info" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Имена и идентификатор на ФЛ издател на финансовия документ. Задължителен за Тип издател “1 - физическо лице“.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="address_by_contract" type="tns:Str_upto_2000">
+              <xsd:annotation>
+                <xsd:documentation>Адрес по договор.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="address_by_activity" type="tns:Str_upto_2000" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Адрес по място на изпълнение на дейността. Задължителен за всички булстат-и, за които има повече от един договор - Аптеки, ВМА, санаториуми и др.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="registration_by_VAT" type="tns:One_Zero" minOccurs="1" maxOccurs="1"> 
+              <xsd:annotation>
+                <xsd:documentation>Тип издател: 1 - регистриран; 0 - не е регистриран</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="grounds_for_not_charging_VAT" type="tns:Str_upto_20" minOccurs="1" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Основание за неначисляване на ДДС. По номенклатура NOM_GROUNDS_NOCHARGE_VAT - чл. 113 ЗДДС, чл. 39 ЗДДС и т.н.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="issuer_bulstat" type="tns:Str_exact_9_13_digits" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Булстат/ЕИК на издателя. Задължителен за Тип издател “0 - юридическо лице“</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="issuer_bulstat_no_vat" type="tns:Str_upto_20" minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>ИН по ДДС</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="contract_no" type="tns:Str_exact_6_digits">
+              <xsd:annotation>
+                <xsd:documentation>Номер на договор</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="contract_date" type="xsd:date">
+              <xsd:annotation>
+                <xsd:documentation>Номер на договор</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="rhi_nhif_no" type="tns:Str_exact_10_digits">
+              <xsd:annotation>
+                <xsd:documentation>РЗИ номер или НЗОК служебен номер</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+                        
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Business_operation">
+      <xsd:complexType>
+        <xsd:sequence>
+            
+            <xsd:element name="activity_code" type="tns:Str_upto_20">
+              <xsd:annotation>
+                <xsd:documentation>Код на дейност - по номенклатура NOM_BUDGET_PAR_ROW_ACTIVITIES</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="activity_name" type="tns:Str_upto_2000">
+              <xsd:annotation>
+                <xsd:documentation>Наименование на дейност - по номенклатура NOM_BUDGET_PAR_ROW_ACTIVITIES</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="unfavorable_conditions" type="tns:Yes_No"  minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Неблагоприятни условия. Само за стоматолози. Задължително се попълва за стоматолози.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="measure_code" type="tns:Str_upto_20">
+              <xsd:annotation>
+                <xsd:documentation>Код на мярка - по номенклатура NOM_FIN_DOCS_MEASURES</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="quantity" type="xsd:float">
+              <xsd:annotation>
+                <xsd:documentation>Количество</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="unit_price" type="tns:Мoney">
+              <xsd:annotation>
+                <xsd:documentation>Единична цена на дейността в лв.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="unit_price_percentage_unf_cond" type="tns:Мoney" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Единична цена, върху която се смята % за неблагоприятни условия. Само за стоматолози. Задължително за стоматолози, ако unfavorable_conditions="1"</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="unit_price_unf_conditions" type="tns:Мoney3" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Единична цена % неблагоприятни условия. Само за стоматолози. Задължително за стоматолози, ако unfavorable_conditions="1"</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="value_price" type="tns:Мoney">
+              <xsd:annotation>
+                <xsd:documentation>Стойност за дейността в лв.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+        
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Aggregated_amounts">
+      <xsd:complexType>
+        <xsd:sequence>
+    
+            <xsd:element name="payment_type" type="tns:Payment_type">
+              <xsd:annotation>
+                <xsd:documentation>Вид плащане - флаг(банков път) - винаги чекнато</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="total_amount" type="tns:Мoney">
+              <xsd:annotation>
+                <xsd:documentation>Обща сума в лв.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="vat_rate" type="xsd:decimal" minOccurs="0" maxOccurs="1" >
+              <xsd:annotation>
+                <xsd:documentation>Ставка ДДС ( % ) - Задължителен при "Регистрация с флаг 1"</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="vat_value" type="tns:Мoney" minOccurs="0" maxOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Стойност на ДДС в лв.- Задължителен при "Регистрация с флаг 1"</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="payment_amount" type="tns:Мoney">
+              <xsd:annotation>
+                <xsd:documentation>Сума за плащане в лв.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="original" type="tns:Original">
+              <xsd:annotation>
+                <xsd:documentation>Оригинал - флаг.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="tax_event_date" type="xsd:date">
+              <xsd:annotation>
+                <xsd:documentation>Дата на данъчно събитие - последната дата на отчетен период.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+    
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+  
+    
+    
+  <!-- ==================================================================================================== -->
+  <!-- ==================================================================================================== -->
+    
+  <xsd:element name="ELECTRONIC_INVOICE">
+        <xsd:annotation>
+          <xsd:documentation>Структура на електронен финансов документ.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            
+            <xsd:element name="fin_document_type_code" type="tns:Str_upto_20">
+              <xsd:annotation>
+                  <xsd:documentation>Вид финансов документ - съгласно номенклатура NOM_FILE_TYPES Фактура, Кредитно известие и т.н.
+                    INVOICE - Фактура
+                    CT_NOTIF - Кредитно известие към фактура
+                    DT_NOTIF - Дебитно известие към фактура
+                    FIN_REPORT_37 - Финансов отчет за заплащане на сумите по чл.37, ал.6 от ЗЗО
+                    FIN_REPORT_PHARM - Финансов отчет на аптеки
+                    CT_NOTIF_PHARM_REP - Кредитно известие към финансов отчет аптеки
+                    DT_NOTIF_PHARM_REP - Дебитно известие към финансов отчет аптеки
+                  </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="fin_document_no" type="tns:Str_exact_10_digits">
+              <xsd:annotation>
+                  <xsd:documentation>№ на финансов документ</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="fin_document_month_no" type="tns:Str_exact_10_digits">
+              <xsd:annotation>
+                  <xsd:documentation>№ на месечно известие/известие за стари периоди</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="fin_document_date" type="xsd:date">
+              <xsd:annotation>
+                <xsd:documentation>Дата на финансов документ</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Main_Fin_Doc" minOccurs="0" maxOccurs="1"> 
+              <xsd:annotation>
+                <xsd:documentation>Основен финансов документ</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Invoice_Recipient"> 
+              <xsd:annotation>
+                <xsd:documentation>Получател на финансовия документ</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Invoice_Issuer"> 
+              <xsd:annotation>
+                <xsd:documentation>Издател на финансовия документ</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="health_insurance_fund_type_code" type="tns:Str_upto_20">
+              <xsd:annotation>
+                  <xsd:documentation>Код на вид здравно осигурителен фонд (Вид потребител) по номенклатура NOM_HEALTH_INS_FUNDS - НЗОК, МЗ, АСП и др. </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="activity_type_code" type="tns:Str_upto_20">
+              <xsd:annotation>
+                  <xsd:documentation>Код на вид дейност по номенклатура NOM_BUDGET_PARAGRAPH_ROWS - 1(ПИМП: Основна дейност),13(ЛАБ: Чужди осигурени), 53(ЛЗБП: КП - Мед. изделия) и т.н.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="date_from" type="xsd:date">
+              <xsd:annotation>
+                  <xsd:documentation>Дейност от дата.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element name="date_to" type="xsd:date">
+              <xsd:annotation>
+                  <xsd:documentation>Дейност до дата.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Business_operation" minOccurs="1" maxOccurs="unbounded">
+              <xsd:annotation>
+                  <xsd:documentation>Стопанска операция.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+            <xsd:element ref="tns:Aggregated_amounts">
+              <xsd:annotation>
+                  <xsd:documentation>Обобщени суми.</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            
+          </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    
+</xsd:schema>
